@@ -1,4 +1,5 @@
-import { Code, Function, Runtime } from '@aws-cdk/aws-lambda'
+import { Runtime } from '@aws-cdk/aws-lambda'
+import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs'
 import { Duration } from '@aws-cdk/core'
 // import { greetingsTable } from '../resources/table'
 import { stack, stage } from '../stack'
@@ -6,11 +7,14 @@ import { stack, stage } from '../stack'
 const functionName =
   stack.stackName + '-http-get-greeting' + (stage === 'prod' ? '' : `-${stage}`)
 
-export const getGreeting = new Function(
+export const getGreeting = new NodejsFunction(
   stack,
   'BlueprintServiceDeleteComment',
   {
-    code: Code.fromAsset('./dist/http/get-greeting'),
+    bundling: {
+      sourceMap: true,
+    },
+    entry: 'src/http/get-greeting.ts',
     // environment: {
     //   DDB_TABLE_NAME: greetingsTable.tableName,
     // },
