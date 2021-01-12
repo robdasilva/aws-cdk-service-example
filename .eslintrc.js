@@ -24,9 +24,16 @@ module.exports = {
   plugins: ['@typescript-eslint', 'jest', 'jest-formatting', 'prettier'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/interface-name-prefix': [
+    '@typescript-eslint/naming-convention': [
       'error',
-      { prefixWithI: 'always' },
+      {
+        custom: {
+          match: true,
+          regex: '^I[A-Z]',
+        },
+        format: ['PascalCase'],
+        selector: 'interface',
+      },
     ],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
