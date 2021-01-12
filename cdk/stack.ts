@@ -1,13 +1,50 @@
-import { App, Stack } from '@aws-cdk/core'
-import { name } from '../package.json'
+import { LambdaIntegration, RestApi } from '@aws-cdk/aws-apigateway'
+// import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb'
+import { Runtime } from '@aws-cdk/aws-lambda'
+import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs'
+import { App, Duration, Stack, StackProps } from '@aws-cdk/core'
 
-export const { region = undefined, stage = 'dev' } = process.env
-  .CDK_CONTEXT_JSON
-  ? JSON.parse(process.env.CDK_CONTEXT_JSON)
-  : {}
+interface IBlueprintStackProps extends StackProps {
+  stage: string
+}
+export default class BlueprintStack extends Stack {
+  constructor(app: App, id: string, { stage, ...props }: IBlueprintStackProps) {
+    super(app, id, props)
 
-export const app = new App()
-export const stack = new Stack(app, 'BlueprintServiceStack', {
-  env: { region },
-  stackName: name + (stage === 'prod' ? '' : `-${stage}`),
-})
+    const restApiName = this.stackName + '-rest-api'
+    const restApi = new RestApi(this, id + 'RestApi', {
+      deployOptions: {
+        stageName: stage,
+      },
+      endpointExportName: `${restApiName}-url`,
+      restApiName,
+    })
+
+    const getGreeting = new NodejsFunction(this, id + 'DeleteComment', {
+      bundling: {
+        sourceMap: true,
+      },
+      entry: 'src/http/get-greeting.ts',
+      // environment: {
+      //   DDB_TABLE_NAME: greetingsTable.tableName,
+      // },
+      functionName: this.stackName + '-http-get-greeting',
+      handler: 'index.default',
+      logRetention: 7,
+      memorySize: 128,
+      runtime: Runtime.NODEJS_12_X,
+      timeout: Duration.seconds(30),
+    })
+
+    // const greetingsTable = new Table(this, id + 'Table', {
+    //   billingMode: BillingMode.PAY_PER_REQUEST,
+    //   partitionKey: { name: 'id', type: AttributeType.STRING },
+    //   tableName: this.stackName + '-greetings',
+    // })
+
+    // greetingsTable.grantReadData(getGreeting)
+
+    const restApiRouteGreetings = restApi.root.addResource('greetings')
+    restApiRouteGreetings.addMethod('GET', new LambdaIntegration(getGreeting))
+  }
+}
