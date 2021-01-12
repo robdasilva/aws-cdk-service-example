@@ -2,9 +2,9 @@ import middy from '@middy/core'
 import httpErrorHandler from '@middy/http-error-handler'
 import httpEventNormalizer from '@middy/http-event-normalizer'
 import httpHeaderNormalizer from '@middy/http-header-normalizer'
+import log from 'middy-lesslog'
 import 'source-map-support/register'
 import iterateGreetings from '../utils/iterate-greetings'
-import log from '../utils/middleware/log'
 
 async function main() {
   let message

@@ -2,8 +2,8 @@ import middy from '@middy/core'
 import httpErrorHandler from '@middy/http-error-handler'
 import httpEventNormalizer from '@middy/http-event-normalizer'
 import httpHeaderNormalizer from '@middy/http-header-normalizer'
+import log from 'middy-lesslog'
 import iterateGreetings from '../utils/iterate-greetings'
-import log from '../utils/middleware/log'
 import handler from './get-greeting'
 
 jest.mock('@middy/core', () =>
@@ -12,7 +12,7 @@ jest.mock('@middy/core', () =>
 jest.mock('@middy/http-error-handler')
 jest.mock('@middy/http-event-normalizer')
 jest.mock('@middy/http-header-normalizer')
-jest.mock('../utils/middleware/log')
+jest.mock('middy-lesslog')
 jest.mock('../utils/iterate-greetings')
 
 describe('getGreeting', () => {
