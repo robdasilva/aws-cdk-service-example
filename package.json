@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "AWS CDK Service Setup Example",
   "license": "MIT",
-  "author": "Robert Schweizer <mail@robertschweizer.me> (http://robertschweizer.me)",
+  "author": "Robert Da Silva <mail@robdasilva.com> (https://robdasilva.com)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rschweizer/aws-cdk-service-example.git"
+    "url": "git+https://github.com/robdasilva/aws-cdk-service-example.git"
   },
   "bugs": {
-    "url": "https://github.com/rschweizer/aws-cdk-service-example/issues"
+    "url": "https://github.com/robdasilva/aws-cdk-service-example/issues"
   },
-  "homepage": "https://github.com/rschweizer/aws-cdk-service-example#readme",
+  "homepage": "https://github.com/robdasilva/aws-cdk-service-example#readme",
   "scripts": {
     "deploy": "cdk deploy",
     "lint": "eslint . --ext .js,.ts --ignore-path .gitignore",
